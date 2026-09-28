@@ -1,11 +1,9 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 
-const databaseUrl = process.env.DATABASE_URL;
-
-if (!databaseUrl) {
-  throw new Error("DATABASE_URL is required");
-}
+// Keep module evaluation safe during static analysis and build-time route collection.
+// Database requests still fail gracefully in the route when no runtime URL is configured.
+const databaseUrl = process.env.DATABASE_URL ?? "postgresql://localhost:5432/document_conversion";
 
 const globalForDb = globalThis as typeof globalThis & {
   __arenaNextJsPostgresqlPool?: Pool;
